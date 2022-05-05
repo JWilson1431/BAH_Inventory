@@ -70,10 +70,20 @@ public class AddMedicationController implements Initializable {
 
     @FXML
     void clickBackBtn(ActionEvent event) throws IOException {
-        stage=(Stage)((Button)event.getSource()).getScene().getWindow();
-        scene= FXMLLoader.load(getClass().getResource("/view/MainScreenAdmin.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
+        //sends the user back to the main admin screen if they are an admin
+        if (Helper.getCurrentUser().getUserType().equals("Admin")) {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = (Parent) FXMLLoader.load(getClass().getResource("/view/MainScreenAdmin.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
+        //otherwise sends the user back to the general main screen
+        else {
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = (Parent) FXMLLoader.load(getClass().getResource("/view/mainScreenGeneral.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
     }
 
     @FXML

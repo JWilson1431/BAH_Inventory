@@ -4,21 +4,20 @@ import Database.Helper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.User;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
-import java.util.ResourceBundle;
 
-public class AddUserController implements Initializable {
+public class UpdateUserController {
     Stage stage;
     Parent scene;
-    String userType;
+    String employeeType;
+
 
     @FXML
     private RadioButton adminRbtn;
@@ -57,39 +56,44 @@ public class AddUserController implements Initializable {
 
     @FXML
     void clickSave(ActionEvent event) throws SQLException, IOException {
-        String userName=userNameTxt.getText();
+        int userId=Integer.parseInt(userIdTxt.getText());
+        String name=userNameTxt.getText();
         String password=passwordTxt.getText();
         String employeeName=employeeNameTxt.getText();
 
         if(adminRbtn.isSelected()){
-            userType= "admin";
-        }
-        else if(generalRbtn.isSelected()){
-            userType="general";
-        }
-
-        if(userNameTxt.getText().isEmpty() || passwordTxt.getText().isEmpty() || employeeNameTxt.getText().isEmpty()){
-            Alert alert= new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Empty field");
-            alert.setContentText("Please fill out all fields and try again");
-            alert.showAndWait();
+            employeeType="Admin";
         }
         else{
-            int rowsAffected= Helper.addUser(userName,password,employeeName,userType);
-            if(rowsAffected>0){
-                Alert alert= new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("User added");
-                alert.setContentText("The user was successfully added");
-                alert.showAndWait();
-
-                stage=(Stage)((Button)event.getSource()).getScene().getWindow();
-                scene=(Parent) FXMLLoader.load(getClass().getResource("/view/userScreen.fxml"));
-                stage.setScene(new Scene(scene));
-                stage.show();
-            }
+            employeeType="General";
         }
+         int rowsAffected= Helper.updateUser(name,password,employeeName,employeeType,userId);
+
+        if(rowsAffected>0){
+            Alert alert=new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("User updated");
+            alert.setContentText("The user was successfully updated");
+            alert.showAndWait();
+
+            stage=(Stage)((Button)event.getSource()).getScene().getWindow();
+            scene=(Parent) FXMLLoader.load(getClass().getResource("/view/userScreen.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
+
     }
-    public void initialize(URL url, ResourceBundle rb){
-        userIdTxt.setDisable(true);
+
+    public void sendUser(User user){
+        userIdTxt.setText(String.valueOf(user.getUserId()));
+        userNameTxt.setText(user.getUserName());
+        passwordTxt.setText(user.getPassword());
+        employeeNameTxt.setText(user.getEmployeeName());
+
+        if(user.getUserType().equals("Admin")){
+            adminRbtn.setSelected(true);
+        }
+        else{
+            generalRbtn.setSelected(true);
+        }
     }
 }

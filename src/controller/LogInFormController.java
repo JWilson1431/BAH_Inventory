@@ -45,9 +45,16 @@ public class LogInFormController {
             alert.showAndWait();
         }
         //if correct log in is true and the username and password are verified, user is logged in
-        else if(correctLogIn){
+        else if(correctLogIn && Helper.checkUserType(userName,password).equals("Admin")){
             stage=(Stage)((Button) event.getSource()).getScene().getWindow();
             scene= FXMLLoader.load(getClass().getResource("/view/MainScreenAdmin.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
+        }
+
+        else if(correctLogIn && Helper.checkUserType(userName,password).equals("General")){
+            stage=(Stage)((Button) event.getSource()).getScene().getWindow();
+            scene= FXMLLoader.load(getClass().getResource("/view/mainScreenGeneral.fxml"));
             stage.setScene(new Scene(scene));
             stage.show();
         }

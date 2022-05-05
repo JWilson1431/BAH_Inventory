@@ -11,6 +11,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Helper {
+    private static User currentUser;
+
+    //getter and setter for currentUser;
+    public static User getCurrentUser(){
+        return currentUser;
+    }
+    public static void setCurrentUser(User currentUser){
+        Helper.currentUser=currentUser;
+    }
 
     //method to add a new user to the database
     public static int addUser(String userName, String password,String employeeName, String userType) throws SQLException {
@@ -61,12 +70,33 @@ public class Helper {
             String password1=rs.getString(3);
             String employeeName1=rs.getString(4);
             String userType=rs.getString(5);
-            User currentUser= new User(userId,userName1,password1,employeeName1,userType);
+            currentUser= new User(userId,userName1,password1,employeeName1,userType);
             return true;
         }
         else{
             return false;
         }
+    }
+    //checks to see if a user is an admin or general user
+    public static String checkUserType(String userName, String password) throws SQLException {
+        String sql = "SELECT * from users WHERE UserName=? and Password=?";
+        PreparedStatement ps = DatabaseConnection.connection.prepareStatement(sql);
+        ps.setString(1, userName);
+        ps.setString(2, password);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            int userId = rs.getInt(1);
+            String userName1 = rs.getString(2);
+            String password1 = rs.getString(3);
+            String employeeName1 = rs.getString(4);
+            String userType = rs.getString(5);
+            User currentUser = new User(userId, userName1, password1, employeeName1, userType);
+            if (currentUser.getUserType().equals("Admin")) {
+                return "Admin";
+
+            }
+        }
+        return"General";
     }
 
     //method to get all users from the database
@@ -124,7 +154,7 @@ public class Helper {
         return allOralMeds;
     }
 
-    //method to update a medication
+    //method to update an injectable medication
     public static int updateInjMed(String name, int quantity, String concentration, int vialSize, int medId) throws SQLException {
         String sql= "UPDATE injectable_med SET Name = ?, Quantity_In_Stock = ?, Concentration = ?, Size_Of_Vial = ? WHERE Medication_ID = ?";
         PreparedStatement ps = DatabaseConnection.connection.prepareStatement(sql);
@@ -137,6 +167,7 @@ public class Helper {
         return rowsAffected;
     }
 
+    //method to update an oral med
     public static int updateOralMed(String name, int quantity, int tabInBottle, int strength, int medId) throws SQLException {
         String sql= "UPDATE oral_med SET Name = ?, Quantity_In_Stock = ?, Tablets_In_Bottle = ?, Tablet_Strength = ? WHERE Medication_ID = ?";
         PreparedStatement ps = DatabaseConnection.connection.prepareStatement(sql);
@@ -149,6 +180,43 @@ public class Helper {
         return rowsAffected;
     }
 
+    //method to update a user
+    public static int updateUser(String name, String password, String employeeName, String employeeType, int userId) throws SQLException {
+        String sql= "UPDATE users SET UserName = ?, password=?, employeeName=?, userType=? WHERE idUser=?";
+        PreparedStatement ps= DatabaseConnection.connection.prepareStatement(sql);
+        ps.setString(1,name);
+        ps.setString(2,password);
+        ps.setString(3,employeeName);
+        ps.setString(4,employeeType);
+        ps.setInt(5,userId);
+        int rowsAffected=ps.executeUpdate();
+        return rowsAffected;
+    }
 
+    //method to delete a user
+    public static int deleteUser(int userId) throws SQLException {
+        String sql="DELETE FROM users WHERE idUser = ?";
+        PreparedStatement ps=DatabaseConnection.connection.prepareStatement(sql);
+        ps.setInt(1,userId);
+        int rowsAffected=ps.executeUpdate();
+        return rowsAffected;
+    }
 
+    //method to delete an injectable med
+    public static int deleteInjMed(int medId) throws SQLException {
+        String sql= "DELETE FROM injectable_med WHERE Medication_ID = ?";
+        PreparedStatement ps=DatabaseConnection.connection.prepareStatement(sql);
+        ps.setInt(1,medId);
+        int rowsAffected=ps.executeUpdate();
+        return rowsAffected;
+    }
+
+    //method to delete an oral med
+    public static int deleteOralMed(int medId) throws SQLException {
+        String sql= "DELETE FROM oral_med WHERE Medication_ID = ?";
+        PreparedStatement ps=DatabaseConnection.connection.prepareStatement(sql);
+        ps.setInt(1,medId);
+        int rowsAffected=ps.executeUpdate();
+        return rowsAffected;
+    }
 }
