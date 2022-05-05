@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="539.0" prefWidth="791.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainScreenGeneralController">
+   <children>
+      <Label layoutX="21.0" layoutY="21.0" text="Welcome to the Broomall Animal Hospital's controlled substance inventory system">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <TableView fx:id="injMedTable" layoutX="21.0" layoutY="73.0" prefHeight="150.0" prefWidth="373.0">
+        <columns>
+          <TableColumn fx:id="injMedIdCol" prefWidth="75.0" text="Med ID" />
+          <TableColumn fx:id="injMedNameCol" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="injMedQuantityCol" prefWidth="75.0" text="Quantity in stock" />
+            <TableColumn fx:id="injMedConcentrationCol" prefWidth="75.0" text="Concentration" />
+            <TableColumn fx:id="injMedVialSizeCol" prefWidth="75.0" text="Vial size" />
+        </columns>
+      </TableView>
+      <Label layoutX="21.0" layoutY="56.0" text="Injectable Medications" />
+      <Label layoutX="21.0" layoutY="282.0" text="Oral Medications" />
+      <TableView fx:id="oralMedTable" layoutX="21.0" layoutY="300.0" prefHeight="200.0" prefWidth="374.0">
+        <columns>
+          <TableColumn fx:id="oralMedIdCol" prefWidth="75.0" text="Med ID" />
+          <TableColumn fx:id="oralMedNameCol" prefWidth="75.0" text="Name" />
+            <TableColumn fx:id="oralMedQuantityCol" prefWidth="75.0" text="Quantity in stock" />
+            <TableColumn fx:id="oralMedTabStrengthCol" prefWidth="75.0" text="Tablet strength" />
+            <TableColumn fx:id="oralMedNumInBottleCol" prefWidth="75.0" text="Tablets in bottle" />
+        </columns>
+      </TableView>
+      <Button fx:id="exitBtn" layoutX="741.0" layoutY="506.0" mnemonicParsing="false" onAction="#exitApp" text="Exit" />
+      <Button fx:id="goToInjectableBtn" layoutX="226.0" layoutY="231.0" mnemonicParsing="false" onAction="#goToInjectableMed" text="Go to injectable meds screen" />
+      <Button fx:id="goToOralMedBtn" layoutX="253.0" layoutY="506.0" mnemonicParsing="false" onAction="#goToOralMed" prefHeight="26.0" prefWidth="142.0" text="Go to oral meds screen" />
+   </children>
+</AnchorPane>
