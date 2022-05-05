@@ -1,6 +1,7 @@
 package controller;
 
 import Database.Helper;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -8,10 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.InjectableMed;
@@ -20,11 +18,13 @@ import model.OralMed;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class OralMedController implements Initializable {
     Stage stage;
     Parent scene;
+    private static ObservableList<OralMed> allOralMeds= FXCollections.observableArrayList();
 
     @FXML
     private Button addMedBtn;
@@ -52,6 +52,9 @@ public class OralMedController implements Initializable {
 
     @FXML
     private TableColumn<OralMed, Integer> vialCol;
+
+    @FXML
+    private Button deleteMedBtn;
 
     @FXML
     void addMed(ActionEvent event) throws IOException {
@@ -116,6 +119,40 @@ public class OralMedController implements Initializable {
             setOralMeds(Helper.getAllOralMeds());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+        }
+    }
+
+    @FXML
+    void deleteMed(ActionEvent event) throws SQLException, IOException {
+//checks to see if a med is selected
+        OralMed medToDelete=oralMedTable.getSelectionModel().getSelectedItem();
+        int medToDeleteId=medToDelete.getMedicationId();
+        if(oralMedTable.getSelectionModel().getSelectedItem()==null){
+            Alert alert= new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Medication not selected");
+            alert.setContentText("Please select a medication to delete and try again");
+            alert.showAndWait();
+        }
+        else {
+            int rowsAffected = Helper.deleteOralMed(medToDeleteId);
+            if (rowsAffected > 0) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete this medication, do you wish to proceed?");
+                Optional<ButtonType> result = alert.showAndWait();
+
+                //deletes the user if confirmation is received
+                if (result.isPresent() && result.get() == ButtonType.OK) {
+                    allOralMeds.remove(medToDelete);
+                    Alert alert1 = new Alert(Alert.AlertType.INFORMATION);
+                    alert1.setTitle("Medication deleted");
+                    alert1.setContentText("The medication was successfully deleted");
+                    alert1.showAndWait();
+                }
+                //refreshes the page once user is deleted
+                stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+                scene = FXMLLoader.load(getClass().getResource("/view/oralMed.fxml"));
+                stage.setScene(new Scene(scene));
+                stage.show();
+            }
         }
     }
 

@@ -97,7 +97,7 @@ public class UserController implements Initializable {
                     allUsers.remove(userToDelete);
                     Alert alert1= new Alert(Alert.AlertType.INFORMATION);
                     alert1.setTitle("User deleted");
-                    alert1.setContentText("The user was sucessfully deleted");
+                    alert1.setContentText("The user was successfully deleted");
                     alert1.showAndWait();
                 }
                 //refreshes the page once user is deleted

@@ -6,7 +6,6 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="501.0" prefWidth="672.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.InjectableMedController">
    <children>
       <TableView fx:id="injMedTable" layoutX="38.0" layoutY="86.0" prefHeight="196.0" prefWidth="523.0">
@@ -20,7 +19,8 @@
       </TableView>
       <Label layoutX="38.0" layoutY="56.0" text="Injectable Medications" />
       <Button fx:id="addMedBtn" layoutX="431.0" layoutY="300.0" mnemonicParsing="false" onAction="#addMed" text="Add a new medication" />
-      <Button fx:id="editMedBtn" layoutX="458.0" layoutY="345.0" mnemonicParsing="false" onAction="#editMed" text="Edit a medication" />
-      <Button fx:id="backBtn" layoutX="443.0" layoutY="389.0" mnemonicParsing="false" onAction="#backToMain" text="Back to main screen" />
+      <Button fx:id="editMedBtn" layoutX="466.0" layoutY="346.0" mnemonicParsing="false" onAction="#editMed" text="Edit medication" />
+      <Button fx:id="backBtn" layoutX="445.0" layoutY="435.0" mnemonicParsing="false" onAction="#backToMain" text="Back to main screen" />
+      <Button fx:id="deleteMedBtn" layoutX="450.0" layoutY="390.0" mnemonicParsing="false" onAction="#clickDeleteMed" text="Delete Medication" />
    </children>
 </AnchorPane>
